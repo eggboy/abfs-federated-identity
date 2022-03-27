@@ -9,13 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SATenantMappingLoader {
 
-	private static ConcurrentHashMap<String, StorageAccount> saTenantMapping;
+	private SATenantMappingLoader() {
+	}
+
+	private static ConcurrentHashMap<String, StorageAccount> saTenantMapping = new ConcurrentHashMap<>();
 
 	public static void populateMapping(String file) throws FileNotFoundException {
-		synchronized(SATenantMappingLoader.class) {
-			if(saTenantMapping == null) saTenantMapping = new ConcurrentHashMap<>();
-		}
-
 		try (Scanner scanner = new Scanner(new File(file))) {
 			scanner.useDelimiter(":");
 
@@ -23,15 +22,17 @@ public class SATenantMappingLoader {
 				String storageAccountName = scanner.next();
 				String clientId = scanner.next();
 				String tenantId = scanner.next();
-				StorageAccount storageAccount = new StorageAccount.Builder().setStorageAccount(storageAccountName)
-						.setTenantId(tenantId).setClientId(clientId).build();
 
+				StorageAccount storageAccount = new StorageAccount.Builder(storageAccountName).clientId(clientId)
+						.tenantId(tenantId).build();
 				saTenantMapping.putIfAbsent(storageAccountName, storageAccount);
 			}
 		}
 
 	}
-	public static StorageAccount getStorageAccount(String storageAccountName)  {
+
+	public static StorageAccount getStorageAccount(String storageAccountName) {
 		return saTenantMapping.get(storageAccountName);
 	}
+
 }

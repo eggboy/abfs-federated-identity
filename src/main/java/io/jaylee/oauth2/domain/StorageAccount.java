@@ -1,62 +1,63 @@
 package io.jaylee.oauth2.domain;
 
-public final class StorageAccount {
+public class StorageAccount {
 
-    private String storageAccountName;
-    private String clientId;
-    private String tenantId;
+	private final String storageAccountName;
 
-    private StorageAccount() {
-    }
+	private final String clientId;
 
-    public static class Builder {
-        private StorageAccount storageAccount;
+	private final String tenantId;
 
-        public Builder() {
-            storageAccount = new StorageAccount();
-        }
+	private StorageAccount(Builder builder) {
+		this.storageAccountName = builder.storageAccountName;
+		this.clientId = builder.clientId;
+		this.tenantId = builder.tenantId;
+	}
 
-        public StorageAccount build() {
-            StorageAccount builtPerson = storageAccount;
-            storageAccount = new StorageAccount();
+	public String getStorageAccountName() {
+		return storageAccountName;
+	}
 
-            return builtPerson;
-        }
+	public String getClientId() {
+		return clientId;
+	}
 
-        public Builder setStorageAccount(String storageAccountName) {
-            this.storageAccount.storageAccountName = storageAccountName;
-            return this;
-        }
+	public String getTenantId() {
+		return tenantId;
+	}
 
-        public Builder setClientId(String clientId) {
-            this.storageAccount.clientId = clientId;
-            return this;
-        }
+	public static class Builder {
 
-        public Builder setTenantId(String tenantId) {
-            this.storageAccount.tenantId = tenantId;
-            return this;
-        }
-    }
+		private final String storageAccountName;
 
-    @Override
-    public String toString() {
-        return "StorageAccount{" +
-                "storageAccountName='" + storageAccountName + '\'' +
-                ", clientId='" + clientId + '\'' +
-                ", tenantId='" + tenantId + '\'' +
-                '}';
-    }
+		private String clientId;
 
-    public String getStorageAccountName() {
-        return storageAccountName;
-    }
+		private String tenantId;
 
-    public String getClientId() {
-        return clientId;
-    }
+		public Builder(String storageAccountName) {
+			this.storageAccountName = storageAccountName;
+		}
 
-    public String getTenantId() {
-        return tenantId;
-    }
+		public StorageAccount build() {
+			return new StorageAccount(this);
+		}
+
+		public Builder clientId(String clientId) {
+			this.clientId = clientId;
+			return this;
+		}
+
+		public Builder tenantId(String tenantId) {
+			this.tenantId = tenantId;
+			return this;
+		}
+
+	}
+
+	@Override
+	public String toString() {
+		return "StorageAccount{" + "storageAccountName='" + storageAccountName + '\'' + ", clientId='" + clientId + '\''
+				+ ", tenantId='" + tenantId + '\'' + '}';
+	}
+
 }
