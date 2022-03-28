@@ -14,8 +14,8 @@ public class SATenantMappingLoader {
 
 	private static ConcurrentHashMap<String, StorageAccount> saTenantMapping = new ConcurrentHashMap<>();
 
-	public static void populateMapping(String file) throws FileNotFoundException {
-		try (Scanner scanner = new Scanner(new File(file))) {
+	public static void populateMapping(File file) throws FileNotFoundException {
+		try (Scanner scanner = new Scanner(file)) {
 			scanner.useDelimiter(":");
 
 			while (scanner.hasNextLine()) {

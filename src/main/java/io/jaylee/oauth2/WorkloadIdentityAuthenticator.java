@@ -16,7 +16,6 @@ import java.util.Set;
 public class WorkloadIdentityAuthenticator {
 
 	private WorkloadIdentityAuthenticator() {
-		throw new IllegalStateException("Adapter class");
 	}
 
 	private static final String SCOPE = "https://storage.azure.com/.default";
@@ -24,10 +23,11 @@ public class WorkloadIdentityAuthenticator {
 	private static final Logger LOG = LoggerFactory.getLogger(WorkloadIdentityAuthenticator.class);
 
 	public static AzureADToken getToken(String azureFederatedTokenFile, String azureAuthorityHost, String azureClientId,
-			String accountName, String tenantId) throws IOException {
+			String tenantId) throws IOException {
 		AzureADToken token = new AzureADToken();
 
-		String clientAssertion = null;
+		String clientAssertion;
+
 		try {
 			clientAssertion = Files.readString(Paths.get(azureFederatedTokenFile));
 		}
@@ -42,7 +42,7 @@ public class WorkloadIdentityAuthenticator {
 		authority.append(azureAuthorityHost);
 		authority.append(tenantId);
 
-		ConfidentialClientApplication app = null;
+		ConfidentialClientApplication app;
 		try {
 			app = ConfidentialClientApplication.builder(azureClientId, credential).authority(authority.toString())
 					.build();

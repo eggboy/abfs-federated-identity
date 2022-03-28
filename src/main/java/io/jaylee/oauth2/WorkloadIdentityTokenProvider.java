@@ -8,6 +8,7 @@ import org.apache.hadoop.util.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -38,7 +39,7 @@ public class WorkloadIdentityTokenProvider implements CustomTokenProviderAdaptee
 				"FS_AZURE_STORAGEACCOUNT_TENANT_ID_MAPPING_FILE");
 
 		this.accountName = accountName;
-		SATenantMappingLoader.populateMapping(configuration.get(FS_AZURE_STORAGEACCOUNT_TENANT_ID_MAPPING_FILE));
+		SATenantMappingLoader.populateMapping(new File(configuration.get(FS_AZURE_STORAGEACCOUNT_TENANT_ID_MAPPING_FILE)));
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class WorkloadIdentityTokenProvider implements CustomTokenProviderAdaptee
 		LOG.debug("AADToken: Getting workload identity based token");
 
 		azureADToken = WorkloadIdentityAuthenticator.getToken(azureFederatedTokenFile, azureAuthorityHost,
-				azureClientId, accountName, SATenantMappingLoader.getStorageAccount(accountName).getTenantId());
+				azureClientId, SATenantMappingLoader.getStorageAccount(accountName).getTenantId());
 
 		return azureADToken.getAccessToken();
 	}
